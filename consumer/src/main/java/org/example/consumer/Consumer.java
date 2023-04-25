@@ -1,13 +1,10 @@
 package org.example.consumer;
 
 
-import org.example.service.Greeting;
-import org.example.service.annotation.Language;
+import org.example.service.CurrencyConvert;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 import java.util.ServiceLoader;
-import java.util.Set;
 
 public class Consumer {
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
@@ -36,7 +33,7 @@ public class Consumer {
 
 
 //        Find all implementations of Greeting..
-        ServiceLoader<Greeting> greetings = ServiceLoader.load(Greeting.class);
+        ServiceLoader<CurrencyConvert> greetings = ServiceLoader.load(CurrencyConvert.class);
 
         for (var greeting : greetings) {
             System.out.println(greeting.sayHello());

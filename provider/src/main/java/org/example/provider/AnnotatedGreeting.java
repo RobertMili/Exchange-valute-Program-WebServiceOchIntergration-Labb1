@@ -1,8 +1,8 @@
 package org.example.provider;
 
-import org.example.service.annotation.Language;
+import org.example.service.annotation.CurrencyAnnotate;
 
-@Language("sv")
+@CurrencyAnnotate("sv")
 public class AnnotatedGreeting {
 
     String hello(){
