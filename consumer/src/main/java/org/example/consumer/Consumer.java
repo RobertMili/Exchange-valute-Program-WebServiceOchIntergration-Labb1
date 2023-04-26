@@ -10,108 +10,107 @@ import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public class Consumer {
-    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         ConversionOption option;
 
+
         while (true) {
             mainMenu();
-            String choiceStr = sc.nextLine();
-
-            if (choiceStr.isEmpty()) {
-                System.out.println("Invalid choice. Please try again");
-                continue;
-            }
-            int choice;
-
-            try {
-                choice = Integer.parseInt(choiceStr);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid choice. Please try again");
-                continue;
-            }
+            int choice = getIntInput("Choice menu: ");
 
             option = ConversionOption.getByChoice(choice);
+
             if (option == null) {
                 System.out.println("Invalid choice. Please try again");
                 continue;
             }
 
-
             switch (option) {
-                case EXIT -> {
-                    System.out.println("Thank you for use program. Program is exits now!");
+                case EXIT:
+                    System.out.println("Thank you for using the program. Program is exiting now!");
                     System.exit(0);
+                    break;
 
-                }
-                case CONVERT_TO_DOLLAR -> {
-                    double convertAmount = getConvertAmount();
-                    sc.nextLine();
-                    convertToDollar(Double.parseDouble(String.valueOf(convertAmount)));
+                case CONVERT_TO_DOLLAR:
+                    double dollarAmount = getConvertAmount();
+                    convertToCurrency("Dollar", dollarAmount);
+                    break;
 
-                }
-                case CONVERT_TO_EUR -> {
-                    double convertAmount = getConvertAmount();
-                    sc.nextLine();
-                    convertToEur(Double.parseDouble(String.valueOf(convertAmount)));
+                case CONVERT_TO_EUR:
+                    double euroAmount = getConvertAmount();
+                    convertToCurrency("EUR", euroAmount);
+                    break;
 
-                }
-                case CONVERT_TO_HRK -> {
-                    double convertAmount = getConvertAmount();
-                    sc.nextLine();
-                    convertToHRK(Double.parseDouble(String.valueOf(convertAmount)));
+                case CONVERT_TO_HRK:
+                    double hrkAmount = getConvertAmount();
+                    convertToCurrency("HRK", hrkAmount);
+                    break;
 
-                }
+                default:
+                    System.out.println("Invalid choice. Please try again");
             }
-
         }
     }
 
-    private static double getConvertAmount() {
-        System.out.println("Write how much amount wanna to convert it:");
-        return sc.nextDouble();
-    }
-
     private static void mainMenu() {
-        final String menuText = """
-                    Main menu
-                 ================
-                 1. Convert Sek to Dollar
-                 2. Convert Sek to Euro
-                 3. Convert Sek to HRK
-                 0. Exit program.
-                 
-                Choice menu:""";
-
-        System.out.println(menuText);
+        System.out.println("""
+            Main menu
+            ================
+            1. Convert SEK to Dollar
+            2. Convert SEK to Euro
+            3. Convert SEK to HRK
+            0. Exit program.
+            """);
     }
 
+    private static double getConvertAmount() {
+        return getDoubleInput("Enter amount to convert: ");
+    }
 
-    private static List<CurrencyConverter> getCurrencyConverter(String currency) {
-        ServiceLoader<CurrencyConverter> currencyConverters = ServiceLoader.load(CurrencyConverter.class);
-        return currencyConverters.stream()
+    private static void convertToCurrency(String currencyCode, double amount) {
+        List<CurrencyConverter> converters = getCurrencyConverter(currencyCode);
+
+        if (converters.isEmpty()) {
+            System.out.println("No currency converter found for " + currencyCode);
+        } else {
+            for (CurrencyConverter converter : converters) {
+                double convertedAmount = converter.getCurrency(amount);
+                System.out.printf("\n%.2f SEK is equal to %.2f %s%n \n", amount, convertedAmount, currencyCode);
+            }
+        }
+    }
+
+    private static List<CurrencyConverter> getCurrencyConverter(String currencyCode) {
+        return ServiceLoader.load(CurrencyConverter.class)
+                .stream()
                 .filter(provider -> provider.type().isAnnotationPresent(CurrencyAnnotation.class))
-                .filter(provider -> provider.type().getAnnotation(CurrencyAnnotation.class).value().equals(currency))
+                .filter(provider -> provider.type().getAnnotation(CurrencyAnnotation.class).value().equals(currencyCode))
                 .map(ServiceLoader.Provider::get)
                 .collect(Collectors.toList());
     }
 
-    private static void convertToDollar(double amount) {
-        for (var converters : getCurrencyConverter("Dollar")) {
-            System.out.println(amount + " SEK is equal to: " + converters.getCurrency(amount) + " Dollar");
+    private static int getIntInput(String message) {
+        while (true) {
+            try {
+                System.out.print(message);
+                return Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            }
         }
     }
 
-    private static void convertToEur(double amount) {
-        for (var converters : getCurrencyConverter("EUR")) {
-            System.out.println(amount + " SEK is equal to: " + converters.getCurrency(amount) + " EUR");
+    private static double getDoubleInput(String message) {
+        while (true) {
+            try {
+                System.out.print(message);
+                return Double.parseDouble(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
         }
     }
 
-    private static void convertToHRK(double amount) {
-        for (var converters : getCurrencyConverter("HRK")) {
-            System.out.println(amount + " SEK is equal to: " + converters.getCurrency(amount) + " HRK");
-        }
-    }
+    private static final Scanner sc = new Scanner(System.in);
 }
