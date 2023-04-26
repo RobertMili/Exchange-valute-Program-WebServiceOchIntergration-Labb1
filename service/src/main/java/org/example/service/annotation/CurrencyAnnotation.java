@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
-public @interface CurrencyAnnotate {
+@Target({ElementType.TYPE})
+public @interface CurrencyAnnotation {
     String value();
 }

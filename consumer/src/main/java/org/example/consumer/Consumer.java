@@ -1,48 +1,98 @@
 package org.example.consumer;
 
 
-import org.example.service.CurrencyConvert;
+import org.example.service.CurrencyConverter;
+import org.example.service.annotation.CurrencyAnnotation;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Scanner;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 public class Consumer {
-    public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
 
 
-//        //Leta efter klasser i paketet org.example.provider
-//
-//        Set<Class> classes = findAllClasses("org.example.provider");
-//
-//        //Kolla om klassen har annotation @Language
-//        for (var c : classes) {
-//            var annotation = (Language) c.getAnnotation(Language.class);
-//            if (annotation != null) {
-//                System.out.println(annotation.value());
-//                //Anropa klassens metod/medoter? och skriva ut returnvärder
-//                var methods = c.getMethods();
-//                for (var m : methods ) {
-//                    if (m.getReturnType().equals(String.class) && m.getParameterCount() == 0) {
-//                        var s = m.invoke(c);
-//                        if (s instanceof  String string)
-//                        System.out.println(s);
-//                    }
-//                }
-//            }
-//        }
+    static Scanner sc = new Scanner(System.in);
+
+    public static void main(String[] args) {
+
+        String choice;
+
+        boolean switching = true;
+        while (switching) {
+            mainMenu();
+            choice = sc.nextLine();
 
 
-//        Find all implementations of Greeting..
-        ServiceLoader<CurrencyConvert> greetings = ServiceLoader.load(CurrencyConvert.class);
 
-        for (var greeting : greetings) {
-            System.out.println(greeting.sayHello());
+            switch (choice) {
+                case "0" -> {
+                    System.out.println("Thank you for use program. Program is exits now!");
+                    System.exit(0);
+                }
+                case "1" -> {
+                    double convertAmount = getConvertAmount();
+                    convertToDollar(Double.parseDouble(String.valueOf(convertAmount)));
+                }
+                case "2" -> {
+                    double convertAmount = getConvertAmount();
+                    convertToEur(Double.parseDouble(String.valueOf(convertAmount)));
+                }
+                case "3" -> {
+                    double convertAmount = getConvertAmount();
+                    convertToHRK(Double.parseDouble(String.valueOf(convertAmount)));
+                }
+            }
+
         }
-
-
     }
 
-//    private static Set<Class> findAllClasses(String s) {
-//        return Set.of();
-//    }
+    private static double getConvertAmount() {
+        System.out.println("Write how much amount wanna to convert it:");
+        return sc.nextDouble();
+    }
+
+    private static void mainMenu() {
+        final String menuText = """
+                    Main menu
+                 ================
+                 1. Convert Sek to Dollar
+                 2. Convert Sek to Euro
+                 3. Convert Sek to HRK
+                 0. Exit program.
+                 
+                Choice menu:""";
+
+        System.out.println(menuText);
+    }
+
+
+
+    private static List<CurrencyConverter> getCurrencyConverter(String currency) {
+        ServiceLoader<CurrencyConverter> currencyConverters = ServiceLoader.load(CurrencyConverter.class);
+        return currencyConverters.stream()
+                .filter(provider -> provider.type().isAnnotationPresent(CurrencyAnnotation.class))
+                .filter(provider -> provider.type().getAnnotation(CurrencyAnnotation.class).value().equals(currency))
+                .map(ServiceLoader.Provider::get)
+                .collect(Collectors.toList());
+    }
+    private static void convertToDollar(double amount) {
+        for (var converters : getCurrencyConverter("Dollar")) {
+            System.out.println(amount + " SEK is equal to: " + converters.getCurrency(amount) + " Dollar");
+        }
+    }
+
+    private static void convertToEur(double amount) {
+        for (var converters : getCurrencyConverter("EUR")) {
+            System.out.println(amount + " SEK is equal to: " + converters.getCurrency(amount) + " EUR");
+        }
+    }
+
+    private static void convertToHRK(double amount) {
+        for (var converters : getCurrencyConverter("HRK")) {
+            System.out.println(amount + " SEK is equal to: " + converters.getCurrency(amount) + " HRK");
+        }
+    }
+
+
 }

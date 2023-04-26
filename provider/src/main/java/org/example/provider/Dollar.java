@@ -1,16 +1,16 @@
 package org.example.provider;
 
 
-import org.example.service.CurrencyConvert;
+import org.example.service.CurrencyConverter;
+import org.example.service.annotation.CurrencyAnnotation;
 
-public class Dollar implements CurrencyConvert {
 
-    public Dollar() {
-        System.out.println("USE dollar");
-    }
+@CurrencyAnnotation("Dollar")
+public class Dollar implements CurrencyConverter {
+
 
     @Override
-    public double getCurrencyConvert(double amount) {
-        return amount * 10.32;
+    public double getCurrency(double amount) {
+        return amount * 0.097;
     }
 }
