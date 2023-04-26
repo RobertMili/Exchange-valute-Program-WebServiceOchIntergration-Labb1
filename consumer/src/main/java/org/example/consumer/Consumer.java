@@ -17,7 +17,7 @@ public class Consumer {
 
         while (true) {
             mainMenu();
-            int choice = getIntInput("Choice menu: ");
+            int choice = getIntInput();
 
             option = ConversionOption.getByChoice(choice);
 
@@ -27,28 +27,23 @@ public class Consumer {
             }
 
             switch (option) {
-                case EXIT:
+                case EXIT -> {
                     System.out.println("Thank you for using the program. Program is exiting now!");
                     System.exit(0);
-                    break;
-
-                case CONVERT_TO_DOLLAR:
+                }
+                case CONVERT_TO_DOLLAR -> {
                     double dollarAmount = getConvertAmount();
                     convertToCurrency("Dollar", dollarAmount);
-                    break;
-
-                case CONVERT_TO_EUR:
+                }
+                case CONVERT_TO_EUR -> {
                     double euroAmount = getConvertAmount();
                     convertToCurrency("EUR", euroAmount);
-                    break;
-
-                case CONVERT_TO_HRK:
+                }
+                case CONVERT_TO_HRK -> {
                     double hrkAmount = getConvertAmount();
                     convertToCurrency("HRK", hrkAmount);
-                    break;
-
-                default:
-                    System.out.println("Invalid choice. Please try again");
+                }
+                default -> System.out.println("Invalid choice. Please try again");
             }
         }
     }
@@ -65,7 +60,7 @@ public class Consumer {
     }
 
     private static double getConvertAmount() {
-        return getDoubleInput("Enter amount to convert: ");
+        return getDoubleInput();
     }
 
     private static void convertToCurrency(String currencyCode, double amount) {
@@ -90,10 +85,10 @@ public class Consumer {
                 .collect(Collectors.toList());
     }
 
-    private static int getIntInput(String message) {
+    private static int getIntInput() {
         while (true) {
             try {
-                System.out.print(message);
+                System.out.print("Choice menu: ");
                 return Integer.parseInt(sc.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
@@ -101,10 +96,10 @@ public class Consumer {
         }
     }
 
-    private static double getDoubleInput(String message) {
+    private static double getDoubleInput() {
         while (true) {
             try {
-                System.out.print(message);
+                System.out.print("Enter amount to convert: ");
                 return Double.parseDouble(sc.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
