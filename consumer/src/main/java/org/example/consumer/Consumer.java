@@ -10,37 +10,58 @@ import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public class Consumer {
-
-
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+        ConversionOption option;
 
-        String choice;
-
-        boolean switching = true;
-        while (switching) {
+        while (true) {
             mainMenu();
-            choice = sc.nextLine();
+            String choiceStr = sc.nextLine();
+
+            if (choiceStr.isEmpty()) {
+                System.out.println("Invalid choice. Please try again");
+                continue;
+            }
+            int choice;
+
+            try {
+                choice = Integer.parseInt(choiceStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid choice. Please try again");
+                continue;
+            }
+
+            option = ConversionOption.getByChoice(choice);
+            if (option == null) {
+                System.out.println("Invalid choice. Please try again");
+                continue;
+            }
 
 
-
-            switch (choice) {
-                case "0" -> {
+            switch (option) {
+                case EXIT -> {
                     System.out.println("Thank you for use program. Program is exits now!");
                     System.exit(0);
+
                 }
-                case "1" -> {
+                case CONVERT_TO_DOLLAR -> {
                     double convertAmount = getConvertAmount();
+                    sc.nextLine();
                     convertToDollar(Double.parseDouble(String.valueOf(convertAmount)));
+
                 }
-                case "2" -> {
+                case CONVERT_TO_EUR -> {
                     double convertAmount = getConvertAmount();
+                    sc.nextLine();
                     convertToEur(Double.parseDouble(String.valueOf(convertAmount)));
+
                 }
-                case "3" -> {
+                case CONVERT_TO_HRK -> {
                     double convertAmount = getConvertAmount();
+                    sc.nextLine();
                     convertToHRK(Double.parseDouble(String.valueOf(convertAmount)));
+
                 }
             }
 
@@ -67,7 +88,6 @@ public class Consumer {
     }
 
 
-
     private static List<CurrencyConverter> getCurrencyConverter(String currency) {
         ServiceLoader<CurrencyConverter> currencyConverters = ServiceLoader.load(CurrencyConverter.class);
         return currencyConverters.stream()
@@ -76,6 +96,7 @@ public class Consumer {
                 .map(ServiceLoader.Provider::get)
                 .collect(Collectors.toList());
     }
+
     private static void convertToDollar(double amount) {
         for (var converters : getCurrencyConverter("Dollar")) {
             System.out.println(amount + " SEK is equal to: " + converters.getCurrency(amount) + " Dollar");
@@ -93,6 +114,4 @@ public class Consumer {
             System.out.println(amount + " SEK is equal to: " + converters.getCurrency(amount) + " HRK");
         }
     }
-
-
 }
