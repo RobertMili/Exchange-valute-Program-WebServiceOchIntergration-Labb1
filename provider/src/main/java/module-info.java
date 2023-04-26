@@ -8,6 +8,8 @@ import org.example.service.CurrencyConverter;
 module org.example.provider {
 
     requires org.example.service;
+//    requires org.json;
+    requires com.google.gson;
 
     exports org.example.provider;
 
