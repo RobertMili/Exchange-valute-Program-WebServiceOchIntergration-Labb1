@@ -1,8 +1,6 @@
 package org.example.provider;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.example.service.CurrencyConverter;
 import org.example.service.annotation.CurrencyAnnotation;
 
@@ -13,14 +11,10 @@ import java.net.URL;
 
 @CurrencyAnnotation("HRK")
 public class HRK implements CurrencyConverter {
-    private String apiUrl;
+    private final String apiUrl;
 
     public HRK() {
         this.apiUrl = "https://api.exchangerate.host/latest";
-    }
-
-    public HRK(String apiUrl) {
-        this.apiUrl = apiUrl;
     }
 
     @Override

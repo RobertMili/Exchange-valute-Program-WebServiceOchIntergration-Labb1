@@ -1,8 +1,7 @@
 package org.example.provider;
 
-import com.google.gson.JsonElement;
+
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.example.service.CurrencyConverter;
 import org.example.service.annotation.CurrencyAnnotation;
 
@@ -13,16 +12,11 @@ import java.net.URL;
 
 @CurrencyAnnotation("Dollar")
 public class Dollar implements CurrencyConverter {
-    private String apiUrl;
+    private final String apiUrl;
 
     public Dollar() {
         this.apiUrl = "https://api.exchangerate.host/latest";
     }
-
-    public Dollar(String apiUrl) {
-        this.apiUrl = apiUrl;
-    }
-
     @Override
     public double getCurrency(double amount) {
         try {
