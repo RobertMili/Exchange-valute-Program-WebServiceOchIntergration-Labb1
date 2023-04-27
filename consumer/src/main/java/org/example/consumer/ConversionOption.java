@@ -12,9 +12,6 @@ public enum ConversionOption {
         this.choice = choice;
     }
 
-    public int getChoice() {
-        return choice;
-    }
     public static ConversionOption getByChoice(int choice) {
         for ( ConversionOption option : values()) {
             if(option.choice == choice) {
