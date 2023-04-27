@@ -13,27 +13,31 @@ import java.net.URL;
 
 @CurrencyAnnotation("Dollar")
 public class Dollar implements CurrencyConverter {
+    private String apiUrl;
+
+    public Dollar() {
+        this.apiUrl = "https://api.exchangerate.host/latest";
+    }
+
+    public Dollar(String apiUrl) {
+        this.apiUrl = apiUrl;
+    }
+
     @Override
     public double getCurrency(double amount) {
         try {
-            String url_str = "https://api.exchangerate.host/latest";
-
-            URL url = new URL(url_str);
+            URL url = new URL(apiUrl);
             HttpURLConnection request = (HttpURLConnection) url.openConnection();
             request.connect();
 
-            JsonParser jp = new JsonParser();
-            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
-            JsonObject jsonobj = root.getAsJsonObject();
+            JsonObject json = com.google.gson.JsonParser.parseReader(new InputStreamReader((InputStream) request.getContent())).getAsJsonObject();
 
-
-            double rate = jsonobj.getAsJsonObject("rates").get("USD").getAsDouble();
+            double rate = json.getAsJsonObject("rates").get("USD").getAsDouble();
 
 
             System.out.println(rate);
 
-            double convertedAmount = amount * rate;
-            return convertedAmount;
+            return amount * rate;
         } catch (Exception e) {
             e.printStackTrace();
             return -1;

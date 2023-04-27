@@ -52,7 +52,7 @@ public class Consumer {
         System.out.println("""
             Main menu
             ================
-            1. Convert EUR to Svensk krona
+            1. Convert EUR to Swedish krona
             2. Convert EUR to Dollar
             3. Convert EUR to HRK
             0. Exit program.

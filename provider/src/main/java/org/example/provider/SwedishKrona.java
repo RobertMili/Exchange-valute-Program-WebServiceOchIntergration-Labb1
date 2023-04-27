@@ -1,26 +1,20 @@
 package org.example.provider;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
 import org.example.service.CurrencyConverter;
 import org.example.service.annotation.CurrencyAnnotation;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.*;
+import java.io.*;
+import com.google.gson.JsonObject;
 
-@CurrencyAnnotation("HRK")
-public class HRK implements CurrencyConverter {
-    private String apiUrl;
 
-    public HRK() {
+@CurrencyAnnotation("SEK")
+public class SwedishKrona implements CurrencyConverter {
+    private final String apiUrl;
+
+    public SwedishKrona() {
         this.apiUrl = "https://api.exchangerate.host/latest";
-    }
-
-    public HRK(String apiUrl) {
-        this.apiUrl = apiUrl;
     }
 
     @Override
@@ -32,10 +26,7 @@ public class HRK implements CurrencyConverter {
 
             JsonObject json = com.google.gson.JsonParser.parseReader(new InputStreamReader((InputStream) request.getContent())).getAsJsonObject();
 
-            double rate = json.getAsJsonObject("rates").get("HRK").getAsDouble();
-
-
-            System.out.println(rate);
+            double rate = json.getAsJsonObject("rates").get("SEK").getAsDouble();
 
             return amount * rate;
         } catch (Exception e) {
@@ -43,5 +34,5 @@ public class HRK implements CurrencyConverter {
             return -1;
         }
     }
-
 }
+
