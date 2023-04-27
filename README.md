@@ -11,6 +11,6 @@ The exchange rates are fetched live from a web API using a GET request to https:
 The program is updated on Docker Hub at https://hub.docker.com/repository/docker/robertmilicevic3869/robertmilicevic/general.
 
 <br />
-Run program:
+Run program:<br />
 - pull down image from  https://hub.docker.com/repository/docker/robertmilicevic3869/robertmilicevic/general<br />
 - docker run -it <docker containter namn>
