@@ -5,18 +5,21 @@ import org.example.service.CurrencyConverter;
 import org.example.service.annotation.CurrencyAnnotation;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public class Consumer {
+    private static final Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ConversionOption option;
 
 
         while (true) {
             mainMenu();
+            Thread.sleep(1000);
             int choice = getIntInput();
 
             option = ConversionOption.getByChoice(choice);
@@ -29,6 +32,7 @@ public class Consumer {
             switch (option) {
                 case EXIT -> {
                     System.out.println("Thank you for using the program. Program is exiting now!");
+                    sc.close();
                     System.exit(0);
                 }
                 case CONVERT_TO_SEK -> {
@@ -46,17 +50,18 @@ public class Consumer {
                 default -> System.out.println("Invalid choice. Please try again");
             }
         }
+
     }
 
     private static void mainMenu() {
         System.out.println("""
-            Main menu
-            ================
-            1. Convert EUR to Swedish krona
-            2. Convert EUR to Dollar
-            3. Convert EUR to HRK
-            0. Exit program.
-            """);
+                Main menu
+                ================
+                1. Convert EUR to Swedish krona
+                2. Convert EUR to Dollar
+                3. Convert EUR to HRK
+                0. Exit program.
+                """);
     }
 
     private static double getConvertAmount() {
@@ -89,11 +94,34 @@ public class Consumer {
         while (true) {
             try {
                 System.out.print("Choice menu: ");
-                return Integer.parseInt(sc.nextLine());
+                if (sc.hasNext()) {
+                    return Integer.parseInt(sc.nextLine());
+                }
+
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
+
             }
         }
+
+
+//        Scanner sc = new Scanner(System.in);
+//        int choice;
+//        while (true) {
+//            try {
+//                System.out.print("Choice menu: ");
+//                Thread.sleep(1000000);
+//                choice = Integer.parseInt(sc.nextLine());
+//                break;
+//            } catch (NumberFormatException e) {
+//                System.out.println("Invalid input. Please enter a valid integer.");
+//            } catch (NoSuchElementException e) {
+//                System.out.println("No input found. Please enter a valid integer.");
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//        return choice;
     }
 
     private static double getDoubleInput() {
@@ -107,5 +135,5 @@ public class Consumer {
         }
     }
 
-    private static final Scanner sc = new Scanner(System.in);
+
 }
