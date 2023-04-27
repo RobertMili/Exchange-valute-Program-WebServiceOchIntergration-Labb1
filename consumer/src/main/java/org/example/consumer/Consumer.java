@@ -103,25 +103,6 @@ public class Consumer {
 
             }
         }
-
-
-//        Scanner sc = new Scanner(System.in);
-//        int choice;
-//        while (true) {
-//            try {
-//                System.out.print("Choice menu: ");
-//                Thread.sleep(1000000);
-//                choice = Integer.parseInt(sc.nextLine());
-//                break;
-//            } catch (NumberFormatException e) {
-//                System.out.println("Invalid input. Please enter a valid integer.");
-//            } catch (NoSuchElementException e) {
-//                System.out.println("No input found. Please enter a valid integer.");
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        return choice;
     }
 
     private static double getDoubleInput() {
