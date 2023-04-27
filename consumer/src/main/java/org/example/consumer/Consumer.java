@@ -31,13 +31,13 @@ public class Consumer {
                     System.out.println("Thank you for using the program. Program is exiting now!");
                     System.exit(0);
                 }
-                case CONVERT_TO_DOLLAR -> {
+                case CONVERT_TO_SEK -> {
                     double dollarAmount = getConvertAmount();
-                    convertToCurrency("Dollar", dollarAmount);
+                    convertToCurrency("SEK", dollarAmount);
                 }
-                case CONVERT_TO_EUR -> {
-                    double euroAmount = getConvertAmount();
-                    convertToCurrency("EUR", euroAmount);
+                case CONVERT_TO_DOLLAR -> {
+                    double sekAmount = getConvertAmount();
+                    convertToCurrency("Dollar", sekAmount);
                 }
                 case CONVERT_TO_HRK -> {
                     double hrkAmount = getConvertAmount();
@@ -52,9 +52,9 @@ public class Consumer {
         System.out.println("""
             Main menu
             ================
-            1. Convert SEK to Dollar
-            2. Convert SEK to Euro
-            3. Convert SEK to HRK
+            1. Convert EUR to Svensk krona
+            2. Convert EUR to Dollar
+            3. Convert EUR to HRK
             0. Exit program.
             """);
     }
@@ -71,7 +71,7 @@ public class Consumer {
         } else {
             for (CurrencyConverter converter : converters) {
                 double convertedAmount = converter.getCurrency(amount);
-                System.out.printf("\n%.2f SEK is equal to %.2f %s%n \n", amount, convertedAmount, currencyCode);
+                System.out.printf("\n%.2f EUR is equal to %.2f %s%n \n", amount, convertedAmount, currencyCode);
             }
         }
     }

@@ -2,8 +2,8 @@ package org.example.consumer;
 
 public enum ConversionOption {
     EXIT(0),
-    CONVERT_TO_DOLLAR(1),
-    CONVERT_TO_EUR(2),
+    CONVERT_TO_SEK(1),
+    CONVERT_TO_DOLLAR(2),
     CONVERT_TO_HRK(3);
 
     private final int choice;

@@ -1,5 +1,5 @@
+import org.example.provider.SvenskKrona;
 import org.example.provider.Dollar;
-import org.example.provider.EUR;
 //import org.example.provider.HRK;
 //import org.example.provider.Dollar;
 import org.example.provider.HRK;
@@ -13,6 +13,6 @@ module org.example.provider {
 
     exports org.example.provider;
 
-    provides CurrencyConverter with  EUR, Dollar, HRK;
+    provides CurrencyConverter with Dollar, SvenskKrona, HRK;
 
 }
