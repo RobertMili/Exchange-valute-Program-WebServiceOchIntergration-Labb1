@@ -4,17 +4,12 @@ COPY . /app
 WORKDIR /app
 RUN mvn clean package
 
-FROM eclipse-temurin:20-jre
+FROM eclipse-temurin:20-jre-alpine
 
-COPY --from=build app/consumer/target/*.jar /app/consumer.jar
+
 COPY --from=build app/provider/target/*.jar /app/lib/provider.jar
-COPY --from=build app/service/target/*.jar /app/lib/service.jar
+COPY --from=build app/consumer/target/*.jar /app/consumer.jar
+COPY --from=build /app/provider/target/alternateLocation/*.jar /app/lib/
 
 
-ENTRYPOINT java --module-path /app:/app/lib/service.jar:/app/lib/converter.jar -m org.example.consumer/org.example.consumer.Consumer
-
-
-
-#LABEL authors="robert"
-#
-#ENTRYPOINT ["top", "-b"]
+ENTRYPOINT java --module-path /app:app/lib:app/lib/consumer.jar -m org.example.consumer/org.example.consumer.Consumer
